@@ -10,10 +10,15 @@ import './GridLayout.scss';
 interface IProps {
     newButtonText: string,
     callback: () => void,
-    dataCallback: () => Promise<GridModel>
+    dataCallback: (searchText:string) => Promise<GridModel>
 }
 
 export const GridLayout: React.FC<IProps> = (props) => {
+
+    const aa = (searchText:string) =>{
+        props.dataCallback(searchText).then(response => {
+            setData(response)});
+    };
 
     const defaultData:GridModel =
     {
@@ -26,14 +31,18 @@ export const GridLayout: React.FC<IProps> = (props) => {
     const [data, setData] = useState(defaultData);
 
     useEffect(() => {
-        props.dataCallback().then(response => {
+        props.dataCallback("").then(response => {
             setData(response)});
     },[props]);
 
     return (
         <Row className="pt-4">
             <Col className="col-sm">
-                <GridLayoutHeader newButtonText={props.newButtonText} callback={props.callback} />
+                <GridLayoutHeader 
+                    newButtonText={props.newButtonText} 
+                    callback={props.callback} 
+                    searchCallback={aa}
+                />
                 <Grid data={data} />
             </Col>
         </Row>

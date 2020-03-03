@@ -8,8 +8,8 @@ import './NotesPage.scss';
 
 export const NotesPage: React.FC = () => {
 
-    async function getNotes() {
-        return await fetch("https://localhost:44375/notes")
+    async function getNotes(searchtext:string) {
+        return await fetch("https://localhost:44375/notes?searchText=" + searchtext)
             .then(res => res.json())
             .then((result) => {
                 const data:GridModel =
