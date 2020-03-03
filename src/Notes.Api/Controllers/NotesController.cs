@@ -13,11 +13,11 @@ namespace Notes.Api.Controllers
     public class NotesController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<NotesController> _logger;
 
         public NotesController(
             IMediator mediator,
-            ILogger<WeatherForecastController> logger)
+            ILogger<NotesController> logger)
         {
             _mediator = mediator;
             _logger = logger;
@@ -34,6 +34,16 @@ namespace Notes.Api.Controllers
                     nameof(Get),
                     new { id = response },
                     null);
+        }
+
+        [HttpGet()]
+        public async Task<ActionResult<string>> Get()
+        {
+            var command = new GetAll.Query();
+
+            var response = await _mediator.Send(command);
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
