@@ -1,39 +1,48 @@
 import React from 'react';
-import { GridLayout } from '../GridLayout';
 import { useHistory } from "react-router-dom";
-import { GridModel } from '../../Models/GridModel';
+
+import { GridLayout } from '../../../Common/Components/GridLayout';
+import { GridModel } from '../../../Common/Models/GridModel';
 
 import './NotesPage.scss';
 
 export const NotesPage: React.FC = () => {
 
-    const history = useHistory();
+    async function getNotes() {
+        return await fetch("https://localhost:44375/notes")
+            .then(res => res.json())
+            .then((result) => {
+                const data:GridModel =
+                {
+                    "metadata": {
+                        "columns": [
+                            {
+                                "label":"Title",
+                                "name": "title",
+                            },
+                            {
+                                "label":"Body",
+                                "name": "body",
+                            }
+                        ]
+                    },
+                    "rows":result
+                };
+                return data;
+            });
+    }
 
-    const data:GridModel =
-    {
-        "metadata": {
-            "columns": [
-                {
-                    "label":"Title",
-                    "name": "title",
-                },
-                {
-                    "label":"Body",
-                    "name": "body",
-                }
-            ]
-        },
-        "rows":[
-            { "title":"Note1", "body":"This is a note" },
-            { "title":"Note2", "body":"This is another note" }
-        ]
-    };
+    const history = useHistory();
 
     const callback = () => {
         history.push("/notes/new");
     };
 
     return (
-        <GridLayout newButtonText={"New Note"} data={data} callback={callback}/>
+        <GridLayout 
+            newButtonText={"New Note"} 
+            dataCallback={getNotes} 
+            callback={callback}
+        />
     );
 };

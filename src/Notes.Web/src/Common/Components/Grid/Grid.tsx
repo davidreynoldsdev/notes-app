@@ -9,7 +9,6 @@ interface IProps {
 }
 
 export const Grid: React.FC<IProps> = (props) => {
-
     return (
         <Table striped bordered hover>
             <thead>
@@ -21,9 +20,9 @@ export const Grid: React.FC<IProps> = (props) => {
             </thead>
             <tbody>
                 {props.data.rows.map((row) =>
-                    <tr key={row.title}>
+                    <tr key={row.id}>
                         {props.data.metadata.columns.map((metadata) =>
-                            <th key={metadata.label}> {row[metadata.name]}</th>
+                            <td key={metadata.label}> {row[metadata.name]}</td>
                         )}
                     </tr>
                 )}

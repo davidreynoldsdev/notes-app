@@ -1,5 +1,5 @@
 import React from 'react';
-import { GridLayoutSearch } from '../../../Notes/Components/GridLayoutSearch'
+import { GridLayoutSearch } from '../GridLayoutSearch'
 
 import './GridLayoutHeader.scss';
 import { Row, Col, Button } from 'react-bootstrap';
@@ -16,7 +16,7 @@ export const GridLayoutHeader: React.FC<IProps> = (props) => {
                 <GridLayoutSearch />
             </Col>
             <Col className="col-sm align-right">
-            <Button onClick={props.callback} className="float-right">New</Button>
+                <Button onClick={props.callback} className="float-right">{props.newButtonText}</Button>
             </Col>
         </Row>
     );
