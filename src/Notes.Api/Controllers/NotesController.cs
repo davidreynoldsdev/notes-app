@@ -45,8 +45,7 @@ namespace Notes.Api.Controllers
         {
             var command = new GetAll.Query
             {
-                Page = new Page(page).Value,
-                Limit = new Limit(limit).Value,
+                Paging = new Paging(page, limit),
                 SearchText = searchText
             };
 

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Options;
 using Notes.Api.Features.Models;
+using Notes.Api.Models.Common;
 using Notes.Api.Options;
 using Notes.Api.Storage;
 using Notes.Api.Storage.Entities;
@@ -16,19 +17,9 @@ namespace Notes.Api.Features.Notes
     {
         public class Query : IRequest<IEnumerable<Note>>
         {
-            public int Page { get; set; }
-
-            public int Limit { get; set; }
+            public Paging Paging { get; set; }
 
             public string SearchText { get; set; }
-
-            public int Skip
-            {
-                get
-                {
-                    return (Page - 1) * Limit;
-                }
-            }
         }
 
         public class Handler : IRequestHandler<Query, IEnumerable<Note>>
@@ -65,8 +56,8 @@ namespace Notes.Api.Features.Notes
                         request.SearchText == null ||
                         searchSegments.Any(x => m.Title.Contains(x, StringComparison.InvariantCultureIgnoreCase)))
                     .OrderBy(m => m.Title)
-                    .Skip(request.Skip)
-                    .Take(request.Limit);
+                    .Skip(request.Paging.Skip)
+                    .Take(request.Paging.Limit);
             }
         }
     }
