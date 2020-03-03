@@ -16,6 +16,19 @@ namespace Notes.Api.Features.Notes
     {
         public class Query : IRequest<IEnumerable<Note>>
         {
+            public int Page { get; set; }
+
+            public int Limit { get; set; }
+
+            public string SearchText { get; set; }
+
+            public int Skip
+            {
+                get
+                {
+                    return (Page - 1) * Limit;
+                }
+            }
         }
 
         public class Handler : IRequestHandler<Query, IEnumerable<Note>>
@@ -33,6 +46,8 @@ namespace Notes.Api.Features.Notes
 
             public async Task<IEnumerable<Note>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var searchSegments = request.SearchText?.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
                 var table = await _storageService.CreateTableAsync(_storageOptions.Notes.TableName);
 
                 var notes = table.CreateQuery<NoteEntity>()
@@ -45,7 +60,13 @@ namespace Notes.Api.Features.Notes
                     })
                     .ToList();
 
-                return notes;
+                return notes
+                    .Where(m =>
+                        request.SearchText == null ||
+                        searchSegments.Any(x => m.Title.Contains(x, StringComparison.InvariantCultureIgnoreCase)))
+                    .OrderBy(m => m.Title)
+                    .Skip(request.Skip)
+                    .Take(request.Limit);
             }
         }
     }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Notes.Api.Models.V1;
 using Notes.Api.Features.Notes;
 using System;
+using Notes.Api.Models.Common;
 
 namespace Notes.Api.Controllers
 {
@@ -37,9 +38,17 @@ namespace Notes.Api.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult<string>> Get()
+        public async Task<ActionResult<string>> Get(
+            [FromQuery] int? page,
+            [FromQuery] int? limit,
+            [FromQuery] string searchText)
         {
-            var command = new GetAll.Query();
+            var command = new GetAll.Query
+            {
+                Page = new Page(page).Value,
+                Limit = new Limit(limit).Value,
+                SearchText = searchText
+            };
 
             var response = await _mediator.Send(command);
 
