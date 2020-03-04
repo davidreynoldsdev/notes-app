@@ -12,9 +12,9 @@ export const GridLayoutSearch: React.FC<IProps> = (props) => {
 
     const [fields, handleFieldChange] = useFormFields({
         searchText: ""
-      });
+    });
 
-    const aa = () => {
+    const handleCallback = () => {
         props.callback(fields.searchText);
     };
 
@@ -31,7 +31,12 @@ export const GridLayoutSearch: React.FC<IProps> = (props) => {
                         onChange={handleFieldChange}
                     />
                     <InputGroup.Append>
-                        <Button variant="outline-secondary" onClick={aa}>Search</Button>
+                        <Button 
+                        variant="outline-secondary" 
+                        onClick={handleCallback}
+                    >
+                        Search
+                    </Button>
                     </InputGroup.Append>
                 </InputGroup>
             </Form>
