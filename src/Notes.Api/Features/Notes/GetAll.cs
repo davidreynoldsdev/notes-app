@@ -47,7 +47,7 @@ namespace Notes.Api.Features.Notes
                     {
                         Id = Guid.Parse(x.RowKey),
                         Title = x.Title,
-                        Body = x.Body
+                        Body = GetBody(x.Body)
                     })
                     .ToList();
 
@@ -58,6 +58,21 @@ namespace Notes.Api.Features.Notes
                     .OrderBy(m => m.Title)
                     .Skip(request.Paging.Skip)
                     .Take(request.Paging.Limit);
+            }
+
+            private string GetBody(string body)
+            {
+                var length = 50;
+                var ellipses = "..";
+
+                if(body.Length < length)
+                {
+                    return body;
+                }
+                else
+                {
+                    return body.Substring(0, length) + ellipses;
+                }
             }
         }
     }

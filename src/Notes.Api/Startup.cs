@@ -51,12 +51,6 @@ namespace Notes.Api
 
             app.UseAuthorization();
 
-            //app.UseCors(builder =>
-            //{
-            //    builder.WithMethods("GET", "POST", "PUT", "DELETE");
-            //    builder.WithOrigins("http://localhost:3000");
-            //});
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

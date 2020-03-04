@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './GridLayoutSearch.scss';
-import { useFormFields } from "../../Libs/HooksLib";
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 
 interface IProps {
@@ -10,12 +9,17 @@ interface IProps {
 
 export const GridLayoutSearch: React.FC<IProps> = (props) => {
 
-    const [fields, handleFieldChange] = useFormFields({
-        searchText: ""
-    });
+    const [fields, setFields] = useState({searchText:""});
 
     const handleCallback = () => {
         props.callback(fields.searchText);
+    };
+
+    const handleChange = (event:any) => {
+        setFields({
+            ...fields,
+            [event.target.id]: event.target.value
+          });
     };
 
     return (
@@ -28,7 +32,7 @@ export const GridLayoutSearch: React.FC<IProps> = (props) => {
                         placeholder=""
                         aria-label=""
                         aria-describedby="basic-addon2"
-                        onChange={handleFieldChange}
+                        onChange={handleChange}
                     />
                     <InputGroup.Append>
                         <Button 
