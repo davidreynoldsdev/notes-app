@@ -33,7 +33,16 @@ namespace Notes.Api
         {
             if (env.IsDevelopment())
             {
+                app.UseCors(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+                });
+
                 app.UseDeveloperExceptionPage();
+            }
+            else { 
             }
 
             app.UseHttpsRedirection();
@@ -42,10 +51,11 @@ namespace Notes.Api
 
             app.UseAuthorization();
 
-            app.UseCors(builder =>
-            {
-                builder.WithOrigins("http://localhost:3000");
-            });
+            //app.UseCors(builder =>
+            //{
+            //    builder.WithMethods("GET", "POST", "PUT", "DELETE");
+            //    builder.WithOrigins("http://localhost:3000");
+            //});
 
             app.UseEndpoints(endpoints =>
             {
