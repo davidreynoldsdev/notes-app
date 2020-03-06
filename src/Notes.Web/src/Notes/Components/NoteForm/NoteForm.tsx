@@ -1,23 +1,21 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
 import {Formik} from 'formik';
 import { Form, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 
 import './NoteForm.scss';
 
-export const NoteForm: React.FC = () => {
+interface IProps {
+    handleSave: (values:any) => void,
+    handleCancel: () => void
+}
 
-     const Markdown = require('react-markdown')
-     const history = useHistory();
+export const NoteForm: React.FC<IProps> = (props) => {
 
-    const handleCancel = (e:any) => {
-        history.push("/");
-    }
+    const Markdown = require('react-markdown')
 
-    const SignupSchema = Yup.object().shape({
+    const noteSchema = Yup.object().shape({
         title: Yup.string()
-          .min(5, 'Too Short!')
           .max(100, 'Too Long!')
           .required('Required'),
         body: Yup.string()
@@ -30,19 +28,8 @@ export const NoteForm: React.FC = () => {
           title: '',
           body: '',
         }}
-        validationSchema={SignupSchema}
-        onSubmit={values => {
-            fetch(process.env.REACT_APP_API_URI + 'notes', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values, null, 2)
-            }).then(function() {
-                history.push("/");
-            });
-        }}
+        validationSchema={noteSchema}
+        onSubmit={props.handleSave}
       >
         {({
             handleSubmit,
@@ -50,7 +37,6 @@ export const NoteForm: React.FC = () => {
             handleBlur,
             values,
             touched,
-            isValid,
             errors,
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
@@ -64,7 +50,6 @@ export const NoteForm: React.FC = () => {
                         isValid={touched.title && !errors.title}
                         isInvalid={touched.title && !!errors.title}
                     />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                     <Form.Control.Feedback type="invalid">
                         {errors.title}
                     </Form.Control.Feedback>
@@ -83,7 +68,6 @@ export const NoteForm: React.FC = () => {
                                 isValid={touched.body && !errors.body}
                                 isInvalid={touched.body && !!errors.body}
                             />
-                            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                             <Form.Control.Feedback type="invalid">
                                 {errors.body}
                             </Form.Control.Feedback>
@@ -102,10 +86,9 @@ export const NoteForm: React.FC = () => {
                 </Row>
 
                 <ButtonGroup>
-                    <Button variant="secondary" onClick={handleCancel}>
+                    <Button variant="secondary" onClick={props.handleCancel}>
                         Cancel
                     </Button>
-                    
                     <Button variant="primary" type="submit">
                         Submit
                     </Button>
