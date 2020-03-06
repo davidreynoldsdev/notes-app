@@ -32,7 +32,7 @@ export const NoteForm: React.FC = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={values => {
-            fetch('https://localhost:44375/notes', {
+            fetch(process.env.REACT_APP_API_URI + 'notes', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

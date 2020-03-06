@@ -10,7 +10,7 @@ import './NotesPage.scss';
 export const NotesPage: React.FC = () => {
 
     async function getNotes(searchtext:string) {
-        return await fetch("https://localhost:44375/notes?searchText=" + searchtext)
+        return await fetch(process.env.REACT_APP_API_URI + "notes?searchText=" + searchtext)
             .then(res => res.json())
             .then((result) => {
                 const data:GridModel =

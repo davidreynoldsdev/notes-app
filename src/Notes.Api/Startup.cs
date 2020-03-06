@@ -43,6 +43,12 @@ namespace Notes.Api
                 app.UseDeveloperExceptionPage();
             }
             else { 
+                app.UseCors(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+                });
             }
 
             app.UseHttpsRedirection();
