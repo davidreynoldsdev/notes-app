@@ -13,9 +13,6 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  azureSubscription: Visual Studio Professional with MSDN
-  appName: apex-prod-uksouth-notes-api
-  vmImageName: 'ubuntu-latest'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -36,9 +33,11 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: AzureWebApp@1 # Add this at the end of your file
+- task: AzureRmWebAppDeployment@4
   inputs:
-    azureSubscription: Visual Studio Professional with MSDN
-    appType: webAppLinux
-    appName: $(appName)
-    package: $(System.ArtifactsDirectory)/**/*.zip
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
+    appType: 'webAppLinux'
+    WebAppName: 'apex-prod-uksouth-notes-api'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    RuntimeStack: 'DOTNETCORE|3.0'
