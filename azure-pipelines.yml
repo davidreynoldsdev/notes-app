@@ -7,7 +7,7 @@ pool:
 
 variables:
   projectFolder: 'src/Notes.Web'
-  buildOutputFolder: '/src/Notes.Web/build'
+  buildOutputFolder: 'src/Notes.Web/build'
 
 steps:
 - task: NodeTool@0
@@ -32,7 +32,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    SourceFolder: $buildOutputFolder
+    SourceFolder: '$(buildOutputFolder)' 
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
