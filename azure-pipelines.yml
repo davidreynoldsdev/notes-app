@@ -18,10 +18,19 @@ steps:
     pushd $(projectFolder) && npm install && popd
     pushd $(projectFolder) && npm run build && popd
 
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/src/Notes.Web/build'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
 - task: AzureRmWebAppDeployment@3
-  displayName: 'Azure App Service Deploy: apex-prod-uksouth-notes-wev'
+  displayName: 'Azure App Service Deploy'
   inputs:
     azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
+    appType: 'applinux'
     WebAppName: 'apex-prod-uksouth-notes-web'
-    Package: '$(System.DefaultWorkingDirectory)/src/Notes.Web/build'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/src/Notes.Web/build'
+    ImageSource: 'Builtin'
+    packageForLinux: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
