@@ -15,8 +15,13 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: 'src\Notes.Web'
 
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    workingDir: 'src\Notes.Web'
+    customCommand: 'build'
