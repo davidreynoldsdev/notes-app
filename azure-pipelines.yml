@@ -29,17 +29,26 @@ steps:
     customCommand: 'run build'
     workingDir: 'src/Notes.Web'
 
+## Copy the client to the staging directory
 - task: CopyFiles@2
-  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
   inputs:
-    SourceFolder: '$(buildOutputFolder)' 
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    sourceFolder: '$(buildOutputFolder)' 
+    contents: '**/*' 
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    cleanTargetFolder: true
 
-- task: PublishPipelineArtifact@1
+## Archive the files into a zip file for publishing
+- task: ArchiveFiles@2
   inputs:
-    targetPath: $(System.DefaultWorkingDirectory)/src/Notes.Web/build
-    artifact: 'drop'
-    publishLocation: 'pipeline'
+    rootFolderOrFile: $(Build.ArtifactStagingDirectory)
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    includeRootFolder: false
+
+## Publish the zip file
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
 - task: AzureRmWebAppDeployment@4
   inputs:
@@ -47,5 +56,4 @@ steps:
     azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
     appType: 'webAppLinux'
     WebAppName: 'apex-prod-uksouth-notes-web'
-    packageForLinux: $(System.DefaultWorkingDirectory)/src/Notes.Web/build
-    RuntimeStack: 'NODE|lts'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
