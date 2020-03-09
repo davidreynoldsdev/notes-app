@@ -4,6 +4,10 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  projectFolder: 'src/Node.Web'
+  buildOutputFolder: 'src/Node.Web/build'
+
 steps:
 - task: NodeTool@0
   inputs:
@@ -11,9 +15,34 @@ steps:
   displayName: 'Install Node.js'
   
 - script: |
-    cd src/Node.Web
-    npm run install 
-    npm run build 
-  displayName: 'npm install, build and test'
-  env:
-    CI: true
+    pushd $(projectFolder) && npm install && popd
+    pushd $(projectFolder) && npm run build && popd
+
+## Copy the client to the staging directory
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(buildOutputFolder)' 
+    contents: '**/*' 
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    cleanTargetFolder: true
+
+## Archive the files into a zip file for publishing
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: $(Build.ArtifactStagingDirectory)
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    includeRootFolder: false
+
+## Publish the zip file
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
+    appType: 'webAppLinux'
+    WebAppName: 'apex-prod-uksouth-notes-web'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
