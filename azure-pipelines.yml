@@ -18,13 +18,25 @@ steps:
     pushd $(projectFolder) && npm install && popd
     pushd $(projectFolder) && npm run build && popd
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(buildOutputFolder)'
+    Contents: '**/*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+    OverWrite: true
+
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/src/Notes.Web/build'
-    includeRootFolder: false
+    rootFolderOrFile: $(Build.ArtifactStagingDirectory)
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
+    includeRootFolder: false
+
+## Publish the zip file
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
 
 - task: AzureRmWebAppDeployment@3
   displayName: 'Azure App Service Deploy'
@@ -33,5 +45,5 @@ steps:
     appType: 'applinux'
     WebAppName: 'apex-prod-uksouth-notes-web'
     ImageSource: 'Builtin'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
     RuntimeStack: 'NODE|10-lts'
