@@ -37,3 +37,11 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
+    appType: 'webAppLinux'
+    WebAppName: 'apex-prod-uksouth-notes-web'
+    packageForLinux: '$(System.ArtifactStagingDirectory)'
