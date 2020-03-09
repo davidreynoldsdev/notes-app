@@ -3,6 +3,7 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
+  demands: npm
 
 variables:
   projectFolder: 'src/Notes.Web'
@@ -13,14 +14,26 @@ steps:
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
-  
-- script: |
-    pushd $(projectFolder) && npm install && popd
-    pushd $(projectFolder) && npm run build && popd
 
-- task: AzureRmWebAppDeployment@3
-  displayName: 'Azure App Service Deploy: apex-prod-uksouth-notes-api'
+- task: Npm@1
+  displayName: 'npm install'
   inputs:
-    azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
-    WebAppName: 'apex-prod-uksouth-notes-web'
-    Package: '$(System.DefaultWorkingDirectory)/build'
+    verbose: false
+    workingDir: 'src/Notes.Web'
+
+- task: Npm@1
+  displayName: 'npm run build'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'run build'
+    workingDir: 'src/Notes.Web'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    SourceFolder: ‘$(System.DefaultWorkingDirectory)/build’
+    TargetFolder: ‘$(Build.ArtifactStagingDirectory)’
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
