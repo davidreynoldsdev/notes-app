@@ -47,5 +47,5 @@ steps:
     azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
     appType: 'webAppLinux'
     WebAppName: 'apex-prod-uksouth-notes-web'
-    packageForLinux: $(Pipeline.Workspace)/drop
+    packageForLinux: $(System.DefaultWorkingDirectory)/src/Notes.Web/build
     RuntimeStack: 'NODE|lts'
