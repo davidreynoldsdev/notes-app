@@ -5,8 +5,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  projectFolder: 'src/Node.Web'
-  buildOutputFolder: 'src/Node.Web/build'
+  projectFolder: 'src/Notes.Web'
+  buildOutputFolder: '/src/Notes.Web/build'
 
 steps:
 - task: NodeTool@0
