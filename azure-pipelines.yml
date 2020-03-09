@@ -3,57 +3,25 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
-  demands: npm
 
 variables:
   projectFolder: 'src/Notes.Web'
-  buildOutputFolder: 'src/Notes.Web/build'
+  buildOutputFolder: '/src/Notes.Web/build'
 
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
+  
+- script: |
+    pushd $(projectFolder) && npm install && popd
+    pushd $(projectFolder) && npm run build && popd
 
-- task: Npm@1
-  displayName: 'npm install'
+- task: AzureRmWebAppDeployment@3
+  displayName: 'Azure App Service Deploy: apex-prod-uksouth-notes-wev'
   inputs:
-    verbose: false
-    workingDir: 'src/Notes.Web'
-
-- task: Npm@1
-  displayName: 'npm run build'
-  inputs:
-    command: custom
-    verbose: false
-    customCommand: 'run build'
-    workingDir: 'src/Notes.Web'
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(buildOutputFolder)'
-    Contents: '**/*'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    CleanTargetFolder: true
-    OverWrite: true
-
-## Archive the files into a zip file for publishing
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: $(Build.ArtifactStagingDirectory)
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    includeRootFolder: false
-
-## Publish the zip file
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
     azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
-    appType: 'webAppLinux'
     WebAppName: 'apex-prod-uksouth-notes-web'
-    packageForLinux: '$(buildOutputFolder)'
+    Package: '$(System.DefaultWorkingDirectory)/src/Notes.Web/build'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/src/Notes.Web/build'
