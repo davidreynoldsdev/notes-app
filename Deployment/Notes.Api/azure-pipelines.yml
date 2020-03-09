@@ -39,13 +39,11 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-- task: AzureRmWebAppDeployment@4
+- task: AzureWebApp@1 # Add this at the end of your file
   inputs:
-    ConnectionType: 'AzureRM'
     azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
-    appType: 'webAppLinux'
-    WebAppName: 'apex-prod-uksouth-notes-api'
-    packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-    RuntimeStack: 'DOTNETCORE|3.0'
+    appType: webAppLinux
+    appName: 'apex-prod-uksouth-notes-api'
+    package: $(System.ArtifactsDirectory)/**/*.zip
 
   
