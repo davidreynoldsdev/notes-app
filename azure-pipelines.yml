@@ -33,4 +33,5 @@ steps:
     appType: 'applinux'
     WebAppName: 'apex-prod-uksouth-notes-web'
     ImageSource: 'Builtin'
-    packageForLinux: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    RuntimeStack: 'NODE|10-lts'
