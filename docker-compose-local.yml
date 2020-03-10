@@ -6,7 +6,7 @@ services:
   notes-api:
     build:
       context: ./src/Notes.Api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.local
     container_name: notes-app-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -17,7 +17,7 @@ services:
   notes-web:
     build:
       context: ./src/Notes.Web
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.local
     container_name: notes-app-web
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
