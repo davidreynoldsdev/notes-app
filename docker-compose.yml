@@ -1,0 +1,25 @@
+---
+version: "3.7"
+
+services:
+
+  notes-api:
+    build:
+      context: ./src/Notes.Api
+      dockerfile: Dockerfile.local
+    container_name: notes-app-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Storage__ConnectionString=DefaultEndpointsProtocol=https;AccountName=apexproduksouthnotesstg;AccountKey=yQkcSitumv8XBxQQhXZa4k4DUJTIDmM+KWC04n5M27XibrVxk3FyLnXZqsPfQpuH+L1ueYsGNacyU8euwZGBnQ==;EndpointSuffix=core.windows.net
+    ports:
+      - 3001:80
+
+  notes-web:
+    build:
+      context: ./src/Notes.Web
+      dockerfile: Dockerfile.local
+    container_name: notes-app-web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 3000:80
