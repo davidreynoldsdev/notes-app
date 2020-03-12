@@ -11,7 +11,9 @@ variables:
   containerRegistry: 'apexproduksouthnotesreg.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/src/Notes.Api/Dockerfile'
   tag: '$(Build.BuildId)'
-  
+  azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
+  appName: 'apex-prod-uksouth-notes-api'
+
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
@@ -33,3 +35,18 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+- stage: Deploy
+  displayName: Deploy stage
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+      steps:
+      - task: AzureWebAppContainer@1
+      displayName: 'Azure Web App on Container Deploy'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appName: $(appName)
+        containers: $(containerRegistry)/$(imageRepository):$(tag)
