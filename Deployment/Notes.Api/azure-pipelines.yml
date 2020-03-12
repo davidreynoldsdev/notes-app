@@ -11,7 +11,6 @@ variables:
    dockerRegistryServiceConnection: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
    tag: 'latest'
 
-steps:
 - stage: Build
   displayName: Build and push stage
   jobs:  
