@@ -5,12 +5,13 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-   vmImageName: 'pipelines-notes-api'
+   vmImageName: 'Ubuntu-16.04'
    dockerfilePath: 'src/Notes.Api/Dockerfile'
    imageRepository: 'apexproduksouthnotesreg'
    dockerRegistryServiceConnection: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
    tag: 'latest'
 
+stages:
 - stage: Build
   displayName: Build and push stage
   jobs:  
