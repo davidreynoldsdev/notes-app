@@ -2,26 +2,30 @@ trigger:
 - master
   
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'Ubuntu-16.04'
 
 variables:
-  buildConfiguration: 'Release'
+   vmImageName: 'pipelines-notes-api'
+   dockerfilePath: 'src/Notes.Api/Dockerfile'
+   imageRepository: 'apexproduksouthnotesreg'
+   dockerRegistryServiceConnection: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
+   tag: 'latest'
 
 steps:
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: 'src/Notes.sln'
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Visual Studio Professional with MSDN(7e4901b5-30dc-42df-9d94-01b9f128322e)'
-    appType: 'webAppLinux'
-    WebAppName: 'apex-prod-uksouth-notes-api'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+- stage: Build
+  displayName: Build and push stage
+  jobs:  
+  - job: Build
+    displayName: Build job
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
