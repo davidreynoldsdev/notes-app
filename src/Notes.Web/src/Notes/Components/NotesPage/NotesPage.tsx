@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-
 import { GridLayout } from '../../../Common/Components/GridLayout';
 import { GridModel } from '../../../Common/Models/GridModel';
 import { PageHeading } from '../../../Common/Components/PageHeading';
@@ -40,13 +39,13 @@ export const NotesPage: React.FC = () => {
     };
 
     return (
-        <div>
+        <>
             <PageHeading title={"Notes"} />
             <GridLayout 
                 newButtonText={"New Note"} 
                 dataCallback={getNotes} 
                 callback={callback}
             />
-        </div>
+        </>
     );
 };
