@@ -6,6 +6,7 @@ using Notes.Api.Models.V1;
 using Notes.Api.Features.Notes;
 using System;
 using Notes.Api.Models.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Notes.Api.Controllers
 {
@@ -25,6 +26,7 @@ namespace Notes.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize("WriteNotes")]
         public async Task<IActionResult> Add([FromBody] NoteDto note)
         {
             var command = new Create.Command(note.Title, note.Body);
@@ -38,6 +40,7 @@ namespace Notes.Api.Controllers
         }
 
         [HttpGet()]
+        [Authorize("ReadNotes")]
         public async Task<ActionResult<string>> Get(
             [FromQuery] int? page,
             [FromQuery] int? limit,

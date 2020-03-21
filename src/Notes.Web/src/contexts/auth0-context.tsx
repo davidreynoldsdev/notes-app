@@ -36,8 +36,9 @@ export class Auth0Provider extends Component<{}, IState> {
     config: Auth0ClientOptions = {
         domain: `${process.env.REACT_APP_AUTH0_DOMAIN}`,
         client_id: `${process.env.REACT_APP_AUTH0_CLIENT_ID}`,
-        redirect_uri: window.location.origin
-    };
+        redirect_uri: window.location.origin,
+        audience: `${process.env.REACT_APP_AUTH0_AUDIENCE}`
+    }; 
     componentDidMount() {
         this.initializeAuth0();     
     }
