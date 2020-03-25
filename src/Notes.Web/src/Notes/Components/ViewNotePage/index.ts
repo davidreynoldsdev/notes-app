@@ -1,0 +1,1 @@
+export { ViewNotePage } from './ViewNotePage';

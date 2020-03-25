@@ -63,6 +63,10 @@ export const NotesPage: React.FC = () => {
         setShowDeleteModal(true);
     };
 
+    const selectCallback = (id:string) => {
+        history.push("/notes/view/" + id);
+    };
+
     const handleDelete = async () =>{
         const token = await getTokenSilently();
 
@@ -87,6 +91,7 @@ export const NotesPage: React.FC = () => {
                 newCallback={() => history.push("/notes/new")}
                 editCallback={ editCallback }
                 deleteCallback={ deleteCallback }
+                selectCallback={ selectCallback }
             />
             <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
                 <Modal.Header closeButton>

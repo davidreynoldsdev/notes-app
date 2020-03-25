@@ -5,9 +5,10 @@ import { GridModel } from '../../Models/GridModel';
 import './Grid.scss';
 
 interface IProps {
-    data: GridModel;
-    editCallback(id:string): void;
-    deleteCallback(id:string): void;
+    data: GridModel,
+    editCallback(id:string): void,
+    deleteCallback(id:string): void,
+    selectCallback(id:string): void
 }
 
 export const Grid: React.FC<IProps> = (props) => {
@@ -26,7 +27,11 @@ export const Grid: React.FC<IProps> = (props) => {
                 {props.data.rows.map((row) =>
                     <tr key={row.id}>
                         {props.data.metadata.columns.map((metadata) =>
-                            <td key={metadata.label}> {row[metadata.name]}</td>
+                            <td 
+                                key={metadata.label} 
+                                onClick={ () => props.selectCallback(row.id) }>
+                                    <span className="pointer"> {row[metadata.name]}</span>
+                            </td>
                         )}
                         <td>
                             <ButtonGroup>

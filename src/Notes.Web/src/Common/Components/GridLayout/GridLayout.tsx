@@ -12,6 +12,7 @@ interface IProps {
     newCallback: () => void,
     editCallback: (id:string) => void,
     deleteCallback: (id:string) => void,
+    selectCallback: (id:string) => void,
     dataCallback: (searchText:string) => Promise<GridModel>
 }
 
@@ -49,6 +50,7 @@ export const GridLayout: React.FC<IProps> = (props) => {
                     data={data} 
                     editCallback={props.editCallback} 
                     deleteCallback={props.deleteCallback}
+                    selectCallback={props.selectCallback}
                 />
             </Col>
         </Row>
