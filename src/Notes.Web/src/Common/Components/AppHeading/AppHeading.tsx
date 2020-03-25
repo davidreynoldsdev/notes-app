@@ -6,6 +6,10 @@ import './AppHeading.scss';
 
 export const AppHeading: React.FC = () => {
     const { isLoading, user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
+
+    console.log(isLoading);
+    console.log(user);
+
     return (
         <Navbar bg="light" expand="lg">
           <Navbar.Brand>Notes</Navbar.Brand>

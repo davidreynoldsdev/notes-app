@@ -1,14 +1,17 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Button, ButtonGroup } from 'react-bootstrap';
 import { GridModel } from '../../Models/GridModel';
 
 import './Grid.scss';
 
 interface IProps {
-    data: GridModel
+    data: GridModel;
+    editCallback(id:string): void;
+    deleteCallback(id:string): void;
 }
 
 export const Grid: React.FC<IProps> = (props) => {
+
     return (
         <Table striped bordered hover>
             <thead>
@@ -16,6 +19,7 @@ export const Grid: React.FC<IProps> = (props) => {
                 {props.data.metadata.columns.map((row) =>
                     <th key={row.label}>{row.label}</th>
                 )}
+                    <th>#</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +28,18 @@ export const Grid: React.FC<IProps> = (props) => {
                         {props.data.metadata.columns.map((metadata) =>
                             <td key={metadata.label}> {row[metadata.name]}</td>
                         )}
+                        <td>
+                            <ButtonGroup>
+                                <Button 
+                                    onClick={ () => props.editCallback(row.id) }>
+                                    Edit
+                                </Button>
+                                <Button 
+                                    onClick={ () => props.deleteCallback(row.id) }>
+                                    Delete
+                                </Button>
+                            </ButtonGroup>
+                        </td>
                     </tr>
                 )}
             </tbody>

@@ -6,7 +6,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 
 interface IProps {
     newButtonText: string,
-    callback: () => void,
+    newCallback: () => void,
     searchCallback: (searchText:string) => void,
 }
 
@@ -17,7 +17,7 @@ export const GridLayoutHeader: React.FC<IProps> = (props) => {
                 <GridLayoutSearch callback={props.searchCallback} />
             </Col>
             <Col className="col-sm align-right">
-                <Button onClick={props.callback} className="float-right">{props.newButtonText}</Button>
+                <Button onClick={props.newCallback} className="float-right">{props.newButtonText}</Button>
             </Col>
         </Row>
     );

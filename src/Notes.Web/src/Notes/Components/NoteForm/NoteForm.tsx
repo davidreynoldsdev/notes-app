@@ -2,13 +2,15 @@ import React from 'react';
 import {Formik} from 'formik';
 import { Form, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
+import { Note } from '../../Models/Note';
 
 import './NoteForm.scss';
 
 interface IProps {
     handleSave: (values:any) => void,
-    handleCancel: () => void
-}
+    handleCancel: () => void,
+    data?:Note
+};
 
 export const NoteForm: React.FC<IProps> = (props) => {
 
@@ -24,13 +26,14 @@ export const NoteForm: React.FC<IProps> = (props) => {
 
     return (
         <Formik
-        initialValues={{
-          title: '',
-          body: '',
-        }}
-        validationSchema={noteSchema}
-        onSubmit={props.handleSave}
-      >
+            enableReinitialize={true} 
+            initialValues={{
+                title: props.data?.title,
+                body: props.data?.body,
+            }}
+            validationSchema={noteSchema}
+            onSubmit={props.handleSave}
+        >
         {({
             handleSubmit,
             handleChange,

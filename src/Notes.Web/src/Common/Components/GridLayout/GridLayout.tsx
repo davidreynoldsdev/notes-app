@@ -9,13 +9,15 @@ import './GridLayout.scss';
 
 interface IProps {
     newButtonText: string,
-    callback: () => void,
+    newCallback: () => void,
+    editCallback: (id:string) => void,
+    deleteCallback: (id:string) => void,
     dataCallback: (searchText:string) => Promise<GridModel>
 }
 
 export const GridLayout: React.FC<IProps> = (props) => {
 
-    const aa = (searchText:string) =>{
+    const searchCallback = (searchText:string) =>{
         props.dataCallback(searchText).then(response => {
             setData(response)});
     };
@@ -40,10 +42,14 @@ export const GridLayout: React.FC<IProps> = (props) => {
             <Col className="col-sm">
                 <GridLayoutHeader 
                     newButtonText={props.newButtonText} 
-                    callback={props.callback} 
-                    searchCallback={aa}
+                    newCallback={props.newCallback} 
+                    searchCallback={searchCallback}
                 />
-                <Grid data={data} />
+                <Grid 
+                    data={data} 
+                    editCallback={props.editCallback} 
+                    deleteCallback={props.deleteCallback}
+                />
             </Col>
         </Row>
     );

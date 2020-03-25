@@ -54,7 +54,8 @@ namespace Notes.Api.Features.Notes
                 return notes
                     .Where(m =>
                         request.SearchText == null ||
-                        searchSegments.Any(x => m.Title.Contains(x, StringComparison.InvariantCultureIgnoreCase)))
+                        searchSegments.Any(x => m.Title.Contains(x, StringComparison.InvariantCultureIgnoreCase)) ||
+                        searchSegments.Any(x => m.Body.Contains(x, StringComparison.InvariantCultureIgnoreCase)))
                     .OrderBy(m => m.Title)
                     .Skip(request.Paging.Skip)
                     .Take(request.Paging.Limit);

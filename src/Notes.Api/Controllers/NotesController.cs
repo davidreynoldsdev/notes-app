@@ -39,6 +39,19 @@ namespace Notes.Api.Controllers
                     null);
         }
 
+        [HttpPut("{id}")]
+        [Authorize("WriteNotes")]
+        public async Task<IActionResult> Put(
+            [FromRoute] Guid id, 
+            [FromBody] NoteDto note)
+        {
+            var command = new Update.Command(id, note.Title, note.Body);
+
+            var response = await _mediator.Send(command);
+
+            return Ok();
+        }
+
         [HttpGet()]
         [Authorize("ReadNotes")]
         public async Task<ActionResult<string>> Get(
@@ -57,10 +70,22 @@ namespace Notes.Api.Controllers
             return Ok(response);
         }
 
+        [Authorize("ReadNotes")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<string>> Get(Guid id)
+        public async Task<ActionResult<string>> Get([FromRoute] Guid id)
         {
             var command = new Get.Query(id);
+
+            var response = await _mediator.Send(command);
+
+            return Ok(response);
+        }
+
+        [Authorize("WriteNotes")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<string>> Delete([FromRoute] Guid id)
+        {
+            var command = new Delete.Command(id);
 
             var response = await _mediator.Send(command);
 
