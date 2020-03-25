@@ -3,6 +3,7 @@ import {Formik} from 'formik';
 import { Form, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { Note } from '../../Models/Note';
+import CodeBlock from "../../../Common/CodeBlock";
 
 import './NoteForm.scss';
 
@@ -83,6 +84,7 @@ export const NoteForm: React.FC<IProps> = (props) => {
                                 className="pl-2 pr-2 markdown"
                                 source={values.body}
                                 escapeHtml
+                                renderers={{ code: CodeBlock }}
                             />
                         </Form.Group>
                     </Col>
